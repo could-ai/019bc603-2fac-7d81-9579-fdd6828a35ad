@@ -105,7 +105,7 @@ final List<Achievement> achievements = [
   Achievement("NOI First Prize", "National Olympiad in Informatics"),
   Achievement("Process Mining Pioneer", "China's First in Process Mining Tech"),
   Achievement("VR Tech Pioneer", "Innovator of VR Home Design Software"),
-  Achievement("Google Camp Founder", "Founded the World's First Google Camp"),
+  Achievement("AI App Builder Pioneer", "Pioneered Cross-platform Native App AI Builder Tech"),
 ];
 
 // --- UI Components ---
@@ -465,42 +465,58 @@ class AchievementsGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 1.3,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 2.2, // Flatter, more compact cards
       ),
       itemCount: achievements.length,
       itemBuilder: (context, index) {
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             color: const Color(0xFF1A1A1A),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Colors.white.withOpacity(0.05)),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
             children: [
-              Icon(Icons.stars, color: const Color(0xFFD4AF37), size: 28),
-              const Spacer(),
-              Text(
-                achievements[index].title,
-                style: GoogleFonts.playfairDisplay(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD4AF37).withOpacity(0.1),
+                  shape: BoxShape.circle,
                 ),
+                child: const Icon(Icons.emoji_events_outlined, color: Color(0xFFD4AF37), size: 18),
               ),
-              const SizedBox(height: 8),
-              Text(
-                achievements[index].subtitle,
-                style: GoogleFonts.lato(
-                  color: Colors.white54,
-                  fontSize: 12,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      achievements[index].title,
+                      style: GoogleFonts.playfairDisplay(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      achievements[index].subtitle,
+                      style: GoogleFonts.lato(
+                        color: Colors.white54,
+                        fontSize: 10,
+                        height: 1.2,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
