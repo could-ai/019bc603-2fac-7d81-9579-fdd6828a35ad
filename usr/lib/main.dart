@@ -17,13 +17,17 @@ class PortfolioApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: const Color(0xFF00E5FF),
-        scaffoldBackgroundColor: const Color(0xFF050505),
-        textTheme: GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme),
+        primaryColor: const Color(0xFFD4AF37), // Luxury Gold
+        scaffoldBackgroundColor: const Color(0xFF000000), // Pure Black
+        // 使用 Noto Sans SC 作为主要字体，解决中文乱码问题
+        textTheme: GoogleFonts.notoSansScTextTheme(ThemeData.dark().textTheme).apply(
+          bodyColor: const Color(0xFFE0E0E0),
+          displayColor: const Color(0xFFFFFFFF),
+        ),
         useMaterial3: true,
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF00E5FF),
-          secondary: Color(0xFF7B61FF),
+          primary: Color(0xFFD4AF37), // Gold
+          secondary: Color(0xFFE5E5E5), // Silver
           surface: Color(0xFF121212),
           onSurface: Color(0xFFE0E0E0),
         ),
@@ -106,35 +110,79 @@ final List<Achievement> achievements = [
 
 // --- UI Components ---
 
-class ProfileHomePage extends StatelessWidget {
+class ProfileHomePage extends StatefulWidget {
   const ProfileHomePage({super.key});
+
+  @override
+  State<ProfileHomePage> createState() => _ProfileHomePageState();
+}
+
+class _ProfileHomePageState extends State<ProfileHomePage> {
+  final ScrollController _scrollController = ScrollController();
+  double _scrollOffset = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      setState(() {
+        _scrollOffset = _scrollController.offset;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: CustomScrollView(
+        controller: _scrollController,
         slivers: [
-          const ProfileHeader(),
+          ProfileHeader(scrollOffset: _scrollOffset),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SectionHeader(title: "关于我", subtitle: "ABOUT ME"),
-                  const SizedBox(height: 16),
-                  const BioCard(),
-                  const SizedBox(height: 40),
-                  const SectionHeader(title: "主要成就", subtitle: "ACHIEVEMENTS"),
-                  const SizedBox(height: 16),
-                  const AchievementsGrid(),
-                  const SizedBox(height: 40),
-                  const SectionHeader(title: "职业经历", subtitle: "EXPERIENCE"),
-                  const SizedBox(height: 16),
-                  const TimelineList(),
-                  const SizedBox(height: 40),
-                  const PersonalInfoSection(),
+                  const FadeInEntry(
+                    delay: 100,
+                    child: SectionHeader(title: "关于我", subtitle: "ABOUT ME"),
+                  ),
+                  const SizedBox(height: 20),
+                  const FadeInEntry(
+                    delay: 200,
+                    child: BioCard(),
+                  ),
                   const SizedBox(height: 60),
+                  const FadeInEntry(
+                    delay: 300,
+                    child: SectionHeader(title: "主要成就", subtitle: "ACHIEVEMENTS"),
+                  ),
+                  const SizedBox(height: 20),
+                  const FadeInEntry(
+                    delay: 400,
+                    child: AchievementsGrid(),
+                  ),
+                  const SizedBox(height: 60),
+                  const FadeInEntry(
+                    delay: 500,
+                    child: SectionHeader(title: "职业经历", subtitle: "EXPERIENCE"),
+                  ),
+                  const SizedBox(height: 20),
+                  const TimelineList(),
+                  const SizedBox(height: 60),
+                  const FadeInEntry(
+                    delay: 600,
+                    child: PersonalInfoSection(),
+                  ),
+                  const SizedBox(height: 80),
                   const Footer(),
                 ],
               ),
@@ -146,61 +194,105 @@ class ProfileHomePage extends StatelessWidget {
   }
 }
 
+// 简单的淡入动画组件
+class FadeInEntry extends StatefulWidget {
+  final Widget child;
+  final int delay;
+
+  const FadeInEntry({super.key, required this.child, this.delay = 0});
+
+  @override
+  State<FadeInEntry> createState() => _FadeInEntryState();
+}
+
+class _FadeInEntryState extends State<FadeInEntry> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacity;
+  late Animation<Offset> _translate;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _opacity = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+    _translate = Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    Future.delayed(Duration(milliseconds: widget.delay), () {
+      if (mounted) _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _opacity,
+      child: SlideTransition(
+        position: _translate,
+        child: widget.child,
+      ),
+    );
+  }
+}
+
 class ProfileHeader extends StatelessWidget {
-  const ProfileHeader({super.key});
+  final double scrollOffset;
+
+  const ProfileHeader({super.key, required this.scrollOffset});
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: 380.0,
+      expandedHeight: 420.0,
       floating: false,
       pinned: true,
-      backgroundColor: const Color(0xFF050505),
+      backgroundColor: Colors.black,
+      stretch: true,
       flexibleSpace: FlexibleSpaceBar(
+        stretchModes: const [StretchMode.zoomBackground, StretchMode.blurBackground],
         background: Stack(
           fit: StackFit.expand,
           children: [
-            // Abstract Background
+            // Background Image / Gradient
             Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF0D1117), Color(0xFF000000)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF1A1A1A),
+                    Color(0xFF000000),
+                  ],
                 ),
               ),
             ),
-            // Decorative Elements
+            // Decorative Abstract Shapes
             Positioned(
               top: -100,
-              right: -50,
+              right: -100,
               child: Container(
-                width: 300,
-                height: 300,
+                width: 400,
+                height: 400,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      const Color(0xFF00E5FF).withOpacity(0.1),
+                      const Color(0xFFD4AF37).withOpacity(0.15), // Gold glow
                       Colors.transparent
                     ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: -50,
-              left: -50,
-              child: Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      const Color(0xFF7B61FF).withOpacity(0.1),
-                      Colors.transparent
-                    ],
+                    radius: 0.6,
                   ),
                 ),
               ),
@@ -210,61 +302,66 @@ class ProfileHeader extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Avatar with Glow
                   Container(
-                    width: 130,
-                    height: 130,
+                    width: 140,
+                    height: 140,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF00E5FF), width: 2),
+                      border: Border.all(color: const Color(0xFFD4AF37), width: 2),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF00E5FF).withOpacity(0.2),
-                          blurRadius: 30,
+                          color: const Color(0xFFD4AF37).withOpacity(0.3),
+                          blurRadius: 40,
                           spreadRadius: 5,
                         )
                       ],
-                      color: Colors.grey[900],
+                      color: const Color(0xFF121212),
                     ),
-                    child: const Icon(Icons.person, size: 65, color: Colors.white70),
+                    child: const Icon(Icons.person, size: 70, color: Color(0xFFE0E0E0)),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 30),
+                  // Name
                   Text(
                     "Lancelot Luan",
-                    style: GoogleFonts.montserrat(
-                      fontSize: 36,
+                    style: GoogleFonts.playfairDisplay( // Serif font for luxury feel
+                      fontSize: 40,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                      letterSpacing: 1.2,
+                      letterSpacing: 1.5,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     "栾添昊",
                     style: GoogleFonts.notoSansSc(
-                      fontSize: 22,
+                      fontSize: 24,
                       fontWeight: FontWeight.w300,
                       color: Colors.white70,
+                      letterSpacing: 4.0,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
+                  // Title Badge
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.05),
+                      color: const Color(0xFFD4AF37).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: Colors.white10),
+                      border: Border.all(color: const Color(0xFFD4AF37).withOpacity(0.3)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.rocket_launch, size: 16, color: Color(0xFF00E5FF)),
-                        const SizedBox(width: 8),
+                        const Icon(Icons.auto_awesome, size: 16, color: Color(0xFFD4AF37)),
+                        const SizedBox(width: 10),
                         Text(
                           "Founder @ CouldAI Inc.",
                           style: GoogleFonts.montserrat(
-                            color: const Color(0xFF00E5FF),
+                            color: const Color(0xFFD4AF37),
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
+                            letterSpacing: 1.0,
                           ),
                         ),
                       ],
@@ -291,33 +388,32 @@ class SectionHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          subtitle,
-          style: GoogleFonts.montserrat(
-            color: const Color(0xFF00E5FF).withOpacity(0.8),
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 3.0,
-          ),
+        Row(
+          children: [
+            Container(
+              width: 4,
+              height: 24,
+              color: const Color(0xFFD4AF37),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              subtitle,
+              style: GoogleFonts.montserrat(
+                color: const Color(0xFFD4AF37),
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 3.0,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 8),
         Text(
           title,
           style: GoogleFonts.notoSansSc(
             color: Colors.white,
-            fontSize: 26,
+            fontSize: 32,
             fontWeight: FontWeight.bold,
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 10),
-          width: 50,
-          height: 3,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF00E5FF), Color(0xFF7B61FF)],
-            ),
-            borderRadius: BorderRadius.circular(2),
           ),
         ),
       ],
@@ -331,15 +427,17 @@ class BioCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(28),
+      padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: const Color(0xFF121212),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        borderRadius: BorderRadius.circular(4), // Sharper corners for modern look
+        border: Border(
+          left: BorderSide(color: const Color(0xFFD4AF37).withOpacity(0.5), width: 2),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 20,
+            color: Colors.black.withOpacity(0.5),
+            blurRadius: 30,
             offset: const Offset(0, 10),
           ),
         ],
@@ -347,9 +445,9 @@ class BioCard extends StatelessWidget {
       child: Text(
         bioSummary,
         style: GoogleFonts.notoSansSc(
-          color: Colors.white70,
+          color: const Color(0xFFCCCCCC),
           fontSize: 16,
-          height: 1.8,
+          height: 2.0, // Better readability
           fontWeight: FontWeight.w300,
         ),
       ),
@@ -369,51 +467,37 @@ class AchievementsGrid extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 1.4,
+        childAspectRatio: 1.3,
       ),
       itemCount: achievements.length,
       itemBuilder: (context, index) {
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                const Color(0xFF1A1F26),
-                const Color(0xFF121212),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(20),
+            color: const Color(0xFF1A1A1A),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Colors.white.withOpacity(0.05)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.amber.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.emoji_events_outlined, color: Color(0xFFFFD700), size: 24),
-              ),
+              Icon(Icons.stars, color: const Color(0xFFD4AF37), size: 28),
               const Spacer(),
               Text(
                 achievements[index].title,
                 style: GoogleFonts.notoSansSc(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontSize: 16,
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
               Text(
                 achievements[index].subtitle,
                 style: GoogleFonts.notoSansSc(
-                  color: Colors.white.withOpacity(0.5),
-                  fontSize: 11,
+                  color: Colors.white54,
+                  fontSize: 12,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -437,104 +521,85 @@ class TimelineList extends StatelessWidget {
       itemCount: experiences.length,
       itemBuilder: (context, index) {
         final exp = experiences[index];
-        return IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Timeline Line
-              Column(
-                children: [
-                  Container(
-                    width: 14,
-                    height: 14,
-                    decoration: BoxDecoration(
-                      color: index == 0 ? const Color(0xFF00E5FF) : const Color(0xFF121212),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: index == 0 ? const Color(0xFF00E5FF) : const Color(0xFF7B61FF),
-                        width: 2,
-                      ),
-                      boxShadow: index == 0 ? [
-                        BoxShadow(
-                          color: const Color(0xFF00E5FF).withOpacity(0.5),
-                          blurRadius: 10,
-                          spreadRadius: 2,
-                        )
-                      ] : [],
-                    ),
-                  ),
-                  if (index != experiences.length - 1)
-                    Expanded(
-                      child: Container(
-                        width: 2,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              const Color(0xFF7B61FF).withOpacity(0.5),
-                              const Color(0xFF7B61FF).withOpacity(0.1),
-                            ],
-                          ),
+        return FadeInEntry(
+          delay: 100 * index,
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Timeline Line
+                Column(
+                  children: [
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: index == 0 ? const Color(0xFFD4AF37) : const Color(0xFF121212),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0xFFD4AF37),
+                          width: 2,
                         ),
                       ),
                     ),
-                ],
-              ),
-              const SizedBox(width: 24),
-              // Content
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 40.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF00E5FF).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
+                    if (index != experiences.length - 1)
+                      Expanded(
+                        child: Container(
+                          width: 1,
+                          color: const Color(0xFF333333),
                         ),
-                        child: Text(
+                      ),
+                  ],
+                ),
+                const SizedBox(width: 24),
+                // Content
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 48.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
                           exp.year,
                           style: GoogleFonts.montserrat(
-                            color: const Color(0xFF00E5FF),
+                            color: const Color(0xFFD4AF37),
                             fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                            fontSize: 14,
+                            letterSpacing: 1.0,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        exp.title,
-                        style: GoogleFonts.notoSansSc(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(height: 8),
+                        Text(
+                          exp.title,
+                          style: GoogleFonts.notoSansSc(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        exp.company,
-                        style: GoogleFonts.notoSansSc(
-                          color: Colors.white70,
-                          fontSize: 15,
+                        const SizedBox(height: 4),
+                        Text(
+                          exp.company,
+                          style: GoogleFonts.notoSansSc(
+                            color: Colors.white70,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        exp.description,
-                        style: GoogleFonts.notoSansSc(
-                          color: Colors.white.withOpacity(0.5),
-                          fontSize: 14,
-                          height: 1.6,
+                        const SizedBox(height: 16),
+                        Text(
+                          exp.description,
+                          style: GoogleFonts.notoSansSc(
+                            color: Colors.grey[400],
+                            fontSize: 15,
+                            height: 1.8,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -548,18 +613,22 @@ class PersonalInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(28),
+      padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: const Color(0xFF121212),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
       child: Column(
         children: [
           _buildInfoRow("中文名", "栾添昊"),
+          const Divider(color: Colors.white10),
           _buildInfoRow("外文名", "Lancelot Luan"),
+          const Divider(color: Colors.white10),
           _buildInfoRow("毕业院校", "上海交通大学 (信息安全工程)"),
+          const Divider(color: Colors.white10),
           _buildInfoRow("籍贯", "黑龙江省牡丹江市"),
+          const Divider(color: Colors.white10),
           _buildInfoRow("出生日期", "1984年4月15日"),
         ],
       ),
@@ -568,14 +637,14 @@ class PersonalInfoSection extends StatelessWidget {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
             style: GoogleFonts.notoSansSc(
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.grey[500],
               fontSize: 14,
             ),
           ),
@@ -584,7 +653,7 @@ class PersonalInfoSection extends StatelessWidget {
             style: GoogleFonts.notoSansSc(
               color: Colors.white,
               fontWeight: FontWeight.w500,
-              fontSize: 14,
+              fontSize: 15,
             ),
           ),
         ],
@@ -601,14 +670,12 @@ class Footer extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          const Icon(Icons.code, color: Colors.white24),
-          const SizedBox(height: 12),
           Text(
             "Powered by CouldAI",
             style: GoogleFonts.montserrat(
-              color: Colors.white.withOpacity(0.3),
+              color: Colors.white24,
               fontSize: 12,
-              letterSpacing: 1.5,
+              letterSpacing: 2.0,
             ),
           ),
           const SizedBox(height: 40),
