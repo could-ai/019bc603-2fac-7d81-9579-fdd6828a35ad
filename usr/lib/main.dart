@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:ui';
 
 void main() {
@@ -17,13 +18,13 @@ class PortfolioApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: const Color(0xFF00E5FF),
-        scaffoldBackgroundColor: const Color(0xFF0A0E14),
-        fontFamily: 'Roboto', // Using default, but styled elegantly
+        scaffoldBackgroundColor: const Color(0xFF050505),
+        textTheme: GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme),
         useMaterial3: true,
         colorScheme: const ColorScheme.dark(
           primary: Color(0xFF00E5FF),
           secondary: Color(0xFF7B61FF),
-          surface: Color(0xFF161B22),
+          surface: Color(0xFF121212),
           onSurface: Color(0xFFE0E0E0),
         ),
       ),
@@ -62,7 +63,7 @@ final List<Experience> experiences = [
     "2024 - Present",
     "创始人 & CEO",
     "CouldAI Inc.",
-    "专注于通用智能体(AGI)与AI编程平台。开发世界首个可生成跨平台原生应用的AI App Builder，实现基于云端的浏览器自动化技术。2025年11月正式发布全球首个基于Flutter技术的AI编程平台。",
+    "2024年11月创立，专注于通用智能体(AGI)与AI编程平台。2025年8月开发完成世界首个可生成跨平台原生应用的AI App Builder。2025年11月正式发布全球首个基于Flutter技术的AI编程平台，实现一键发布到App Store及Google Play。",
   ),
   Experience(
     "2021 - 2024",
@@ -151,10 +152,10 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: 350.0,
+      expandedHeight: 380.0,
       floating: false,
       pinned: true,
-      backgroundColor: const Color(0xFF0A0E14),
+      backgroundColor: const Color(0xFF050505),
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,
@@ -165,20 +166,42 @@ class ProfileHeader extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF1A237E), Color(0xFF000000)],
+                  colors: [Color(0xFF0D1117), Color(0xFF000000)],
                 ),
               ),
             ),
-            // Decorative Circles
+            // Decorative Elements
             Positioned(
-              top: -50,
+              top: -100,
               right: -50,
+              child: Container(
+                width: 300,
+                height: 300,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      const Color(0xFF00E5FF).withOpacity(0.1),
+                      Colors.transparent
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -50,
+              left: -50,
               child: Container(
                 width: 200,
                 height: 200,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.blue.withOpacity(0.1),
+                  gradient: RadialGradient(
+                    colors: [
+                      const Color(0xFF7B61FF).withOpacity(0.1),
+                      Colors.transparent
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -188,52 +211,63 @@ class ProfileHeader extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 120,
-                    height: 120,
+                    width: 130,
+                    height: 130,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: const Color(0xFF00E5FF), width: 2),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF00E5FF).withOpacity(0.3),
-                          blurRadius: 20,
+                          color: const Color(0xFF00E5FF).withOpacity(0.2),
+                          blurRadius: 30,
                           spreadRadius: 5,
                         )
                       ],
                       color: Colors.grey[900],
                     ),
-                    child: const Icon(Icons.person, size: 60, color: Colors.white54),
+                    child: const Icon(Icons.person, size: 65, color: Colors.white70),
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
+                  const SizedBox(height: 24),
+                  Text(
                     "Lancelot Luan",
-                    style: TextStyle(
-                      fontSize: 32,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 36,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                      letterSpacing: 1.5,
+                      letterSpacing: 1.2,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     "栾添昊",
-                    style: TextStyle(
-                      fontSize: 20,
+                    style: GoogleFonts.notoSansSc(
+                      fontSize: 22,
                       fontWeight: FontWeight.w300,
                       color: Colors.white70,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white12),
+                      color: Colors.white.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(color: Colors.white10),
                     ),
-                    child: const Text(
-                      "Founder @ CouldAI Inc.",
-                      style: TextStyle(color: Color(0xFF00E5FF), fontWeight: FontWeight.w500),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.rocket_launch, size: 16, color: Color(0xFF00E5FF)),
+                        const SizedBox(width: 8),
+                        Text(
+                          "Founder @ CouldAI Inc.",
+                          style: GoogleFonts.montserrat(
+                            color: const Color(0xFF00E5FF),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -259,27 +293,32 @@ class SectionHeader extends StatelessWidget {
       children: [
         Text(
           subtitle,
-          style: TextStyle(
-            color: const Color(0xFF00E5FF).withOpacity(0.7),
+          style: GoogleFonts.montserrat(
+            color: const Color(0xFF00E5FF).withOpacity(0.8),
             fontSize: 12,
             fontWeight: FontWeight.bold,
-            letterSpacing: 2.0,
+            letterSpacing: 3.0,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 6),
         Text(
           title,
-          style: const TextStyle(
+          style: GoogleFonts.notoSansSc(
             color: Colors.white,
-            fontSize: 24,
+            fontSize: 26,
             fontWeight: FontWeight.bold,
           ),
         ),
         Container(
-          margin: const EdgeInsets.only(top: 8),
-          width: 40,
+          margin: const EdgeInsets.only(top: 10),
+          width: 50,
           height: 3,
-          color: const Color(0xFF00E5FF),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF00E5FF), Color(0xFF7B61FF)],
+            ),
+            borderRadius: BorderRadius.circular(2),
+          ),
         ),
       ],
     );
@@ -292,25 +331,26 @@ class BioCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: const Color(0xFF161B22),
-        borderRadius: BorderRadius.circular(16),
+        color: const Color(0xFF121212),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.white.withOpacity(0.05)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
-      child: const Text(
+      child: Text(
         bioSummary,
-        style: TextStyle(
+        style: GoogleFonts.notoSansSc(
           color: Colors.white70,
           fontSize: 16,
-          height: 1.6,
+          height: 1.8,
+          fontWeight: FontWeight.w300,
         ),
       ),
     );
@@ -329,44 +369,51 @@ class AchievementsGrid extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 1.5,
+        childAspectRatio: 1.4,
       ),
       itemCount: achievements.length,
       itemBuilder: (context, index) {
         return Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                const Color(0xFF1E2732),
-                const Color(0xFF161B22),
+                const Color(0xFF1A1F26),
+                const Color(0xFF121212),
               ],
             ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.white.withOpacity(0.05)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.emoji_events_outlined, color: Color(0xFFFFD700), size: 28),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.amber.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.emoji_events_outlined, color: Color(0xFFFFD700), size: 24),
+              ),
               const Spacer(),
               Text(
                 achievements[index].title,
-                style: const TextStyle(
+                style: GoogleFonts.notoSansSc(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 15,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 6),
               Text(
                 achievements[index].subtitle,
-                style: TextStyle(
+                style: GoogleFonts.notoSansSc(
                   color: Colors.white.withOpacity(0.5),
-                  fontSize: 12,
+                  fontSize: 11,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -398,62 +445,89 @@ class TimelineList extends StatelessWidget {
               Column(
                 children: [
                   Container(
-                    width: 12,
-                    height: 12,
+                    width: 14,
+                    height: 14,
                     decoration: BoxDecoration(
-                      color: index == 0 ? const Color(0xFF00E5FF) : const Color(0xFF7B61FF),
+                      color: index == 0 ? const Color(0xFF00E5FF) : const Color(0xFF121212),
                       shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF0A0E14), width: 2),
+                      border: Border.all(
+                        color: index == 0 ? const Color(0xFF00E5FF) : const Color(0xFF7B61FF),
+                        width: 2,
+                      ),
+                      boxShadow: index == 0 ? [
+                        BoxShadow(
+                          color: const Color(0xFF00E5FF).withOpacity(0.5),
+                          blurRadius: 10,
+                          spreadRadius: 2,
+                        )
+                      ] : [],
                     ),
                   ),
                   if (index != experiences.length - 1)
                     Expanded(
                       child: Container(
                         width: 2,
-                        color: Colors.white.withOpacity(0.1),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              const Color(0xFF7B61FF).withOpacity(0.5),
+                              const Color(0xFF7B61FF).withOpacity(0.1),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                 ],
               ),
-              const SizedBox(width: 20),
+              const SizedBox(width: 24),
               // Content
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 32.0),
+                  padding: const EdgeInsets.only(bottom: 40.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        exp.year,
-                        style: const TextStyle(
-                          color: Color(0xFF00E5FF),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF00E5FF).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          exp.year,
+                          style: GoogleFonts.montserrat(
+                            color: const Color(0xFF00E5FF),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 12),
                       Text(
                         exp.title,
-                        style: const TextStyle(
+                        style: GoogleFonts.notoSansSc(
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      const SizedBox(height: 4),
                       Text(
                         exp.company,
-                        style: const TextStyle(
+                        style: GoogleFonts.notoSansSc(
                           color: Colors.white70,
-                          fontSize: 16,
+                          fontSize: 15,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 12),
                       Text(
                         exp.description,
-                        style: TextStyle(
+                        style: GoogleFonts.notoSansSc(
                           color: Colors.white.withOpacity(0.5),
                           fontSize: 14,
-                          height: 1.5,
+                          height: 1.6,
                         ),
                       ),
                     ],
@@ -474,10 +548,11 @@ class PersonalInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: const Color(0xFF161B22),
-        borderRadius: BorderRadius.circular(16),
+        color: const Color(0xFF121212),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
       child: Column(
         children: [
@@ -493,17 +568,24 @@ class PersonalInfoSection extends StatelessWidget {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: TextStyle(color: Colors.white.withOpacity(0.5)),
+            style: GoogleFonts.notoSansSc(
+              color: Colors.white.withOpacity(0.5),
+              fontSize: 14,
+            ),
           ),
           Text(
             value,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+            style: GoogleFonts.notoSansSc(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
           ),
         ],
       ),
@@ -520,16 +602,16 @@ class Footer extends StatelessWidget {
       child: Column(
         children: [
           const Icon(Icons.code, color: Colors.white24),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(
             "Powered by CouldAI",
-            style: TextStyle(
+            style: GoogleFonts.montserrat(
               color: Colors.white.withOpacity(0.3),
               fontSize: 12,
-              letterSpacing: 1.2,
+              letterSpacing: 1.5,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
         ],
       ),
     );
