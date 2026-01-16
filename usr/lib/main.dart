@@ -19,8 +19,8 @@ class PortfolioApp extends StatelessWidget {
         brightness: Brightness.dark,
         primaryColor: const Color(0xFFD4AF37), // Luxury Gold
         scaffoldBackgroundColor: const Color(0xFF000000), // Pure Black
-        // 使用 Noto Sans SC 作为主要字体，解决中文乱码问题
-        textTheme: GoogleFonts.notoSansScTextTheme(ThemeData.dark().textTheme).apply(
+        // Use Lato for body text for a clean, modern, international look
+        textTheme: GoogleFonts.latoTextTheme(ThemeData.dark().textTheme).apply(
           bodyColor: const Color(0xFFE0E0E0),
           displayColor: const Color(0xFFFFFFFF),
         ),
@@ -60,52 +60,52 @@ class Achievement {
 
 // --- Content Data ---
 
-const String bioSummary = "毕业于上海交通大学信息安全工程专业，信息安全、流程挖掘与人工智能领域技术专家、连续创业者。曾任职于 Symantec，参与创办秒针系统，并在多家人工智能、工业互联网及企业数字化公司担任首席技术官。长期从事分布式系统、流程自动化与智能体相关技术研发。";
+const String bioSummary = "Lancelot Luan is a distinguished expert in Information Security, Process Mining, and Artificial Intelligence, and a serial entrepreneur. A graduate of Shanghai Jiao Tong University in Information Security Engineering, he has held key positions at Symantec and co-founded Miaozhen Systems (later Mininglamp Technology). As CTO for multiple high-tech enterprises, he has led innovations in distributed systems, process automation, and AI agents. In 2024, he founded CouldAI, pioneering the next generation of General Purpose Agents and AI-driven programming platforms.";
 
 final List<Experience> experiences = [
   Experience(
     "2024 - Present",
-    "创始人 & CEO",
+    "Founder & CEO",
     "CouldAI Inc.",
-    "2024年11月创立，专注于通用智能体(AGI)与AI编程平台。2025年8月开发完成世界首个可生成跨平台原生应用的AI App Builder。2025年11月正式发布全球首个基于Flutter技术的AI编程平台，实现一键发布到App Store及Google Play。",
+    "Founded in Nov 2024, focusing on AGI and AI coding platforms. Successfully developed the world's first AI App Builder for cross-platform native apps by Aug 2025. Officially launched the global-first Flutter-based AI coding platform in Nov 2025, enabling one-click publishing to App Store & Google Play.",
   ),
   Experience(
     "2021 - 2024",
     "CTO",
-    "九科信息技术 (深圳)",
-    "孵化于招商局集团。主导研发国内首个实现商业化落地的企业级GUI智能体bit-Agent，构建AI Agent、流程挖掘、RPA核心技术壁垒。服务200亿以上营收规模大型企业上百家。",
+    "JiuKe Info Tech (Shenzhen)",
+    "Incubated by China Merchants Group. Spearheaded the R&D of China's first commercialized enterprise-grade GUI Agent 'bit-Agent', establishing core technical barriers in AI Agents, Process Mining, and RPA. Empowered over 100 large-scale enterprises with revenues exceeding 20 billion RMB.",
   ),
   Experience(
     "2016 - 2021",
     "CTO",
-    "新格尔人居 (Thinkerx)",
-    "从0到1打造服务上万家工厂的工业互联网平台。独自开发0.1秒排版优化算法（行业通常需数分钟）。柜柜软件服务超过142万家商家，通过AI优化板材利用率。",
+    "Thinkerx",
+    "Built an Industrial Internet platform from zero to one, serving over 10,000 factories. Independently engineered a 0.1s layout optimization algorithm (industry avg: minutes). The 'Guigui' software serves over 1.42 million merchants, utilizing AI to maximize material efficiency.",
   ),
   Experience(
     "2011 - 2016",
-    "创始人",
-    "VR整体家装平台",
-    "创办世界首个VR整体家装平台，基于游戏引擎开发家居VR设计软件。公司最高估值5亿元，整合产业链资源，打造VR家装生态链。",
+    "Founder",
+    "VR Integrated Home Platform",
+    "Established the world's first VR integrated home decoration platform. Developed proprietary VR design software using game engines. The company reached a valuation of 500 million RMB, integrating supply chains to create a comprehensive VR ecosystem.",
   ),
   Experience(
     "2007 - 2011",
-    "产品负责人 / 早期核心成员",
-    "秒针系统 (明略科技)",
-    "参与创办明略科技前身。带领团队发展为亚太最大互联网广告公司，日处理1000亿次PV数据。明略科技于2025年在港交所挂牌，市值超420亿港元。",
+    "Product Lead / Co-founder",
+    "Miaozhen Systems (Mininglamp)",
+    "Co-founded the predecessor of Mininglamp Technology. Led the team to build Asia's largest internet advertising data platform, processing 100 billion daily PVs. Mininglamp listed on the HKEX in 2025 with a market cap exceeding 42 billion HKD.",
   ),
   Experience(
     "2007",
-    "软件工程师",
+    "Software Engineer",
     "Symantec",
-    "任职于世界第四大软件商，从事分布式容灾备份软件及企业级端点安全产品(企业级诺顿)开发。",
+    "Served at the world's fourth-largest software company, developing distributed disaster recovery software and enterprise-grade endpoint security products (Enterprise Norton).",
   ),
 ];
 
 final List<Achievement> achievements = [
-  Achievement("NOI 一等奖", "全国信息学奥林匹克竞赛"),
-  Achievement("流程挖掘第一人", "中国流程挖掘技术先行者"),
-  Achievement("VR技术开创者", "VR家居设计软件技术开创者"),
-  Achievement("Google Camp", "创办全球第一家学生社团"),
+  Achievement("NOI First Prize", "National Olympiad in Informatics"),
+  Achievement("Process Mining Pioneer", "China's First in Process Mining Tech"),
+  Achievement("VR Tech Pioneer", "Innovator of VR Home Design Software"),
+  Achievement("Google Camp Founder", "Founded the World's First Google Camp"),
 ];
 
 // --- UI Components ---
@@ -153,7 +153,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
                 children: [
                   const FadeInEntry(
                     delay: 100,
-                    child: SectionHeader(title: "关于我", subtitle: "ABOUT ME"),
+                    child: SectionHeader(title: "BIOGRAPHY", subtitle: "ABOUT ME"),
                   ),
                   const SizedBox(height: 20),
                   const FadeInEntry(
@@ -163,7 +163,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
                   const SizedBox(height: 60),
                   const FadeInEntry(
                     delay: 300,
-                    child: SectionHeader(title: "主要成就", subtitle: "ACHIEVEMENTS"),
+                    child: SectionHeader(title: "DISTINCTIONS", subtitle: "ACHIEVEMENTS"),
                   ),
                   const SizedBox(height: 20),
                   const FadeInEntry(
@@ -173,7 +173,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
                   const SizedBox(height: 60),
                   const FadeInEntry(
                     delay: 500,
-                    child: SectionHeader(title: "职业经历", subtitle: "EXPERIENCE"),
+                    child: SectionHeader(title: "CAREER HISTORY", subtitle: "EXPERIENCE"),
                   ),
                   const SizedBox(height: 20),
                   const TimelineList(),
@@ -194,7 +194,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
   }
 }
 
-// 简单的淡入动画组件
+// Simple Fade-In Animation Widget
 class FadeInEntry extends StatefulWidget {
   final Widget child;
   final int delay;
@@ -333,9 +333,9 @@ class ProfileHeader extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "栾添昊",
-                    style: GoogleFonts.notoSansSc(
-                      fontSize: 24,
+                    "FOUNDER & CTO",
+                    style: GoogleFonts.montserrat(
+                      fontSize: 16,
                       fontWeight: FontWeight.w300,
                       color: Colors.white70,
                       letterSpacing: 4.0,
@@ -410,7 +410,7 @@ class SectionHeader extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           title,
-          style: GoogleFonts.notoSansSc(
+          style: GoogleFonts.playfairDisplay(
             color: Colors.white,
             fontSize: 32,
             fontWeight: FontWeight.bold,
@@ -444,10 +444,10 @@ class BioCard extends StatelessWidget {
       ),
       child: Text(
         bioSummary,
-        style: GoogleFonts.notoSansSc(
+        style: GoogleFonts.lato(
           color: const Color(0xFFCCCCCC),
           fontSize: 16,
-          height: 2.0, // Better readability
+          height: 1.8, // Better readability
           fontWeight: FontWeight.w300,
         ),
       ),
@@ -486,7 +486,7 @@ class AchievementsGrid extends StatelessWidget {
               const Spacer(),
               Text(
                 achievements[index].title,
-                style: GoogleFonts.notoSansSc(
+                style: GoogleFonts.playfairDisplay(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -495,7 +495,7 @@ class AchievementsGrid extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 achievements[index].subtitle,
-                style: GoogleFonts.notoSansSc(
+                style: GoogleFonts.lato(
                   color: Colors.white54,
                   fontSize: 12,
                 ),
@@ -571,7 +571,7 @@ class TimelineList extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           exp.title,
-                          style: GoogleFonts.notoSansSc(
+                          style: GoogleFonts.playfairDisplay(
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -580,7 +580,7 @@ class TimelineList extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           exp.company,
-                          style: GoogleFonts.notoSansSc(
+                          style: GoogleFonts.lato(
                             color: Colors.white70,
                             fontSize: 16,
                           ),
@@ -588,10 +588,10 @@ class TimelineList extends StatelessWidget {
                         const SizedBox(height: 16),
                         Text(
                           exp.description,
-                          style: GoogleFonts.notoSansSc(
+                          style: GoogleFonts.lato(
                             color: Colors.grey[400],
                             fontSize: 15,
-                            height: 1.8,
+                            height: 1.6,
                           ),
                         ),
                       ],
@@ -621,15 +621,13 @@ class PersonalInfoSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildInfoRow("中文名", "栾添昊"),
+          _buildInfoRow("Name", "Lancelot Luan"),
           const Divider(color: Colors.white10),
-          _buildInfoRow("外文名", "Lancelot Luan"),
+          _buildInfoRow("Education", "SJTU (InfoSec Engineering)"),
           const Divider(color: Colors.white10),
-          _buildInfoRow("毕业院校", "上海交通大学 (信息安全工程)"),
+          _buildInfoRow("Hometown", "Mudanjiang, China"),
           const Divider(color: Colors.white10),
-          _buildInfoRow("籍贯", "黑龙江省牡丹江市"),
-          const Divider(color: Colors.white10),
-          _buildInfoRow("出生日期", "1984年4月15日"),
+          _buildInfoRow("Birth Date", "April 15, 1984"),
         ],
       ),
     );
@@ -643,14 +641,14 @@ class PersonalInfoSection extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.notoSansSc(
+            style: GoogleFonts.montserrat(
               color: Colors.grey[500],
               fontSize: 14,
             ),
           ),
           Text(
             value,
-            style: GoogleFonts.notoSansSc(
+            style: GoogleFonts.lato(
               color: Colors.white,
               fontWeight: FontWeight.w500,
               fontSize: 15,
